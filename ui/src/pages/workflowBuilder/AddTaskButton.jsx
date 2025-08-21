@@ -5,7 +5,6 @@ export default function AddTaskButton({ id, data, disabled, }) {
     const [open, setOpen] = useState(false);
     const popRef = useRef(null);
 
-    // Tutup popover kalau klik di luar
     useEffect(() => {
         function onDocClick(e) {
             if (!popRef.current) return;

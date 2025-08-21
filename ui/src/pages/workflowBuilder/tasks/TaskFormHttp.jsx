@@ -1,50 +1,55 @@
-import { Input } from "../../../components";
+import { Dropdown, Input } from "../../../components";
+import TaskCommonFields from "./TaskCommonFields";
 
-export default function TaskFormHttp({ selectedNode, onTaskChange }) {
+export const httpMethods = ["GET", "POST", "PUT", "DELETE"];
+
+export default function TaskFormHttp({
+    selectedNode,
+    onTaskChange,
+    onParamChange,
+    onAddParam,
+    onRemoveParam,
+}) {
     const extractValue = (e) => (e?.target ? e.target.value : e);
 
     return (
         <div>
-            <Input
-                fullWidth
-                label="Name"
-                value={selectedNode?.data?.name ?? ""}
-                onChange={(e) =>
-                    onTaskChange?.(selectedNode.id, "name", extractValue(e))
-                }
+            {/* Reuse Common Fields */}
+            <TaskCommonFields
+                selectedNode={selectedNode}
+                onTaskChange={onTaskChange}
+                onParamChange={onParamChange}
+                onAddParam={onAddParam}
+                onRemoveParam={onRemoveParam}
             />
-            <Input
-                fullWidth
-                label="Reference Name"
-                value={selectedNode?.data?.taskReferenceName ?? ""}
-                onChange={(e) =>
-                    onTaskChange?.(
-                        selectedNode.id,
-                        "taskReferenceName",
-                        extractValue(e)
-                    )
-                }
-            />
-            <Input
-                fullWidth
-                label="HTTP URL"
-                value={selectedNode?.data?.httpUrl ?? ""}
-                onChange={(e) =>
-                    onTaskChange?.(selectedNode.id, "httpUrl", extractValue(e))
-                }
-            />
-            <select
-                className="border rounded p-2 mt-3 w-full"
-                value={selectedNode?.data?.httpMethod ?? "GET"}
-                onChange={(e) =>
-                    onTaskChange?.(selectedNode.id, "httpMethod", extractValue(e))
-                }
-            >
-                <option>GET</option>
-                <option>POST</option>
-                <option>PUT</option>
-                <option>DELETE</option>
-            </select>
+
+            {/* HTTP Specific Fields */}
+            <div className="mt-6">
+                <Input
+                    fullWidth
+                    label="HTTP URL"
+                    value={selectedNode?.data?.httpUrl ?? ""}
+                    onChange={(e) =>
+                        onTaskChange?.(selectedNode.id, "httpUrl", extractValue(e))
+                    }
+                />
+            </div>
+
+            <div className="mt-4">
+                <Dropdown
+                    label="Method"
+                    fullWidth
+                    options={httpMethods}
+                    value={
+                        httpMethods.includes(selectedNode?.data?.httpMethod)
+                            ? selectedNode.data.httpMethod
+                            : "GET"
+                    }
+                    onChange={(_, newValue) =>
+                        onTaskChange?.(selectedNode.id, "httpMethod", newValue)
+                    }
+                />
+            </div>
         </div>
     );
 }

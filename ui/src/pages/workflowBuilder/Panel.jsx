@@ -3,6 +3,8 @@ import { Input } from "../../components";
 import TaskFormSimple from "./tasks/TaskFormSimple";
 import TaskFormHttp from "./tasks/TaskFormHttp";
 import TaskFormInline from "./tasks/TaskFormInline";
+import { normalizeWorkflow } from "../../utils/normalizeWorkflow ";
+import CopyButton from "./CopyButton";
 
 export default function Panel({
   selectedNode,
@@ -17,7 +19,6 @@ export default function Panel({
     if (selectedNode) setActiveTab("Task");
   }, [selectedNode]);
 
-  // helper untuk ambil value dari event / raw value
   const extractValue = (e) => (e?.target ? e.target.value : e);
 
   const handleChange = (field) => (e) => {
@@ -97,6 +98,9 @@ export default function Panel({
                 <TaskFormHttp
                   selectedNode={selectedNode}
                   onTaskChange={onTaskChange}
+                  onParamChange={onParamChange}
+                  onAddParam={onAddParam}
+                  onRemoveParam={onRemoveParam}
                 />
               )}
 
@@ -109,7 +113,7 @@ export default function Panel({
 
               {!["SIMPLE", "HTTP", "INLINE"].includes(selectedNode?.data?.type) && (
                 <p className="text-sm text-gray-500">
-                  Task type <b>{selectedNode?.data?.type}</b> belum di-handle.
+                  Task type <b>{selectedNode?.data?.type}</b> not found.
                 </p>
               )}
             </div>
@@ -118,9 +122,12 @@ export default function Panel({
           {/* Code Tab */}
           {activeTab === "Code" && (
             <div className="bg-white p-4">
-              <h3 className="mb-4">Workflow JSON</h3>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium">Workflow JSON</h3>
+                <CopyButton workflowData={workflowData} />
+              </div>
               <pre className="text-xs bg-gray-100 p-2 rounded overflow-x-auto">
-                {JSON.stringify(workflowData, null, 2)}
+                {JSON.stringify(normalizeWorkflow(workflowData), null, 2)}
               </pre>
             </div>
           )}

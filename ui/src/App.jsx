@@ -2,7 +2,7 @@ import React from "react";
 
 import { Route, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
-import { loader } from '@monaco-editor/react';
+import { loader } from "@monaco-editor/react";
 import { Button, AppBar, Toolbar } from "@material-ui/core";
 import AppLogo from "./plugins/AppLogo";
 import NavLink from "./components/NavLink";
@@ -27,6 +27,7 @@ import CustomRoutes from "./plugins/CustomRoutes";
 import AppBarModules from "./plugins/AppBarModules";
 import CustomAppBarButtons from "./plugins/CustomAppBarButtons";
 import Workbench from "./pages/workbench/Workbench";
+import WorkflowBuilder from "./pages/workflowBuilder/WorkflowBuilder";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,6 +73,9 @@ export default function App() {
           </Button>
           <Button component={NavLink} path="/workbench">
             Workbench
+          </Button>
+          <Button component={NavLink} path="/workflowBuilder">
+            Workflow Builder
           </Button>
           <CustomAppBarButtons />
 
@@ -127,6 +131,9 @@ export default function App() {
           <Route exact path="/kitchen/gantt">
             <Gantt />
           </Route>
+          <Route exact path="/workflowBuilder">
+            <WorkflowBuilder />
+          </Route>
           <CustomRoutes />
         </Switch>
       </div>
@@ -136,5 +143,5 @@ export default function App() {
 
 if (process.env.REACT_APP_MONACO_EDITOR_USING_CDN === "false") {
   // Change the source of the monaco files, see https://github.com/suren-atoyan/monaco-react/issues/168#issuecomment-762336713
-  loader.config({ paths: { vs: '/monaco-editor/min/vs' } });
+  loader.config({ paths: { vs: "/monaco-editor/min/vs" } });
 }
